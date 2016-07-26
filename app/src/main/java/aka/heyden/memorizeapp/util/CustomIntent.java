@@ -11,6 +11,6 @@ import android.util.Log;
 public class CustomIntent extends Intent {
     public CustomIntent(Context packageContext, Class<?> cls) {
         super(packageContext, cls);
-        Log.d("CustomIntent", packageContext.getClass().getSimpleName() + " -> " + cls.getClass().getSimpleName());
+        Log.d("CustomIntent", packageContext.getClass().getSimpleName() + " -> " + cls.getSimpleName());
     }
 }
