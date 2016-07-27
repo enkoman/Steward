@@ -82,6 +82,7 @@ public class ScreenController extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LockApplication.getInstance().setController(null);
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }

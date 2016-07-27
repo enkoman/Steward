@@ -1,17 +1,14 @@
 package aka.heyden.memorizeapp.view;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import aka.heyden.memorizeapp.util.NavigationUtil;
 import aka.heyden.memorizeapp.R;
-import aka.heyden.memorizeapp.model.ScreenController;
-import aka.heyden.memorizeapp.receiver.ScreenReceiver;
 
 /**
  * Created by N4047 on 2016-07-22.
@@ -36,7 +33,6 @@ public class SettingActivity extends Activity implements View.OnClickListener{
 
         // 스크린 락 유무 확인
         isScreenOn = getPreferences();
-
         uiUpdate(isScreenOn);
     }
 
@@ -49,18 +45,14 @@ public class SettingActivity extends Activity implements View.OnClickListener{
         savePreferences(true);
         this.isScreenOn = true;
         uiUpdate(this.isScreenOn);
-        Intent intent = new Intent(SettingActivity.this, ScreenController.class);
-        // intent.setPackage("aka.heyden.memorizeapp");
-        startService(intent);
+        NavigationUtil.startScreenController(this);
     }
     private void screenOff(){
         Log.d("?", "screenOff");
         savePreferences(false);
         this.isScreenOn = false;
         uiUpdate(this.isScreenOn);
-        Intent intent = new Intent(SettingActivity.this, ScreenController.class);
-        // intent.setPackage("aka.heyden.memorizeapp");
-        stopService(intent);
+        NavigationUtil.stopScreenController(this);
     }
 
     // 값 불러오기
@@ -87,23 +79,4 @@ public class SettingActivity extends Activity implements View.OnClickListener{
             }
         }
     }
-
-
-
-    // 값(Key Data) 삭제하기
-    private void removePreferences(){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.remove("hi");
-        editor.commit();
-    }
-
-    // 값(ALL Data) 삭제하기
-    private void removeAllPreferences(){
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.commit();
-    }
-
 }
