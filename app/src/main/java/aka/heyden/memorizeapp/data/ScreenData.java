@@ -1,25 +1,44 @@
 package aka.heyden.memorizeapp.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Pair;
-
-import java.util.ArrayList;
-
 /**
  * Created by N4047 on 2016-07-22.
  */
 
-public class ScreenData implements Parcelable {
+public class ScreenData {
     public ScreenData() {
     }
 
     private String word = "";
     private String diction = "";
     private String mean = "";
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+    public String getDiction() {
+        return diction;
+    }
+
+    public void setDiction(String diction) {
+        this.diction = diction;
+    }
+
+    public String getMean() {
+        return mean;
+    }
+
+    public void setMean(String mean) {
+        this.mean = mean;
+    }
+
     // private ArrayList<Pair<String, String>> exampleList;
 
-    public ScreenData(Parcel src) {
+   /* public ScreenData(Parcel src) {
         word = src.readString();
         diction = src.readString();
         mean = src.readString();
@@ -77,7 +96,7 @@ public class ScreenData implements Parcelable {
         this.mean = mean;
     }
 
-    /*public Pair<String, String>[] getExampleList() {
+    *//*public Pair<String, String>[] getExampleList() {
         return exampleList;
     }
 

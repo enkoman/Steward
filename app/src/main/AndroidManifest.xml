@@ -6,6 +6,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="aka.heyden.memorizeapp">
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
     <application
         android:name=".LockApplication"
         android:allowBackup="true"
@@ -21,7 +24,8 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".model.ScreenController" />
+        <service
+            android:name=".model.ScreenController" />
 
         <activity android:name=".view.SettingActivity">
             <intent-filter>

@@ -2,7 +2,6 @@ package aka.heyden.memorizeapp.model;
 
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
@@ -12,10 +11,8 @@ import android.util.Log;
 import aka.heyden.memorizeapp.LockApplication;
 import aka.heyden.memorizeapp.data.ScreenData;
 import aka.heyden.memorizeapp.receiver.ScreenReceiver;
-import aka.heyden.memorizeapp.util.CustomIntent;
 import aka.heyden.memorizeapp.view.LockActivity;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import aka.heyden.memorizeapp.view.LockScreenView;
 
 
 /**
@@ -26,7 +23,8 @@ public class ScreenController extends Service {
     private LockActivity mActivity;
     private ScreenData mData;
     private ScreenReceiver mReceiver;
-    private String action="";
+    private String action = "";
+    private LockScreenView screen;
 
     @Nullable
     @Override
@@ -36,17 +34,21 @@ public class ScreenController extends Service {
 
     @Override
     public void onCreate() {
+        init();
+        super.onCreate();
+    }
+
+    private void init() {
         Log.d("ScreenController", "생성완료");
         LockApplication.getInstance().setController(this);
         registerReceiver();
-        super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(nullCheck(intent)){
+        if (nullCheck(intent)) {
             action = intent.getExtras().getString("screenState", "EMPTY");
-            if(!action.equals("EMPTY")){
+            if (!action.equals("EMPTY")) {
 
                 /**
                  * 스크린이 꺼지면
@@ -75,8 +77,8 @@ public class ScreenController extends Service {
      * @param intent
      * @return if intent and intent.getExtras() are not null, get the true
      */
-    private boolean nullCheck(Intent intent){
-        return ((intent != null)?((intent.getExtras()!=null)?true:false):false);
+    private boolean nullCheck(Intent intent) {
+        return ((intent != null) ? ((intent.getExtras() != null) ? true : false) : false);
     }
 
     @Override
@@ -89,6 +91,12 @@ public class ScreenController extends Service {
     }
 
     private void initScreen() {
+        if (screen == null) {
+            screen = new LockScreenView(this);
+        }else{
+            screen.changeData(shuffleData());
+        }
+        /*
         if (this.mActivity == null) {
             Log.d("ScreenController", "mActivity == null");
             Intent intent = new CustomIntent(this, LockActivity.class);
@@ -98,7 +106,7 @@ public class ScreenController extends Service {
         } else {
             Log.d("ScreenController", "mActivity != null");
             this.mActivity.changeData(shuffleData());
-        }
+        }*/
     }
 
     private ScreenData shuffleData() {
@@ -109,7 +117,7 @@ public class ScreenController extends Service {
 
     private void showScreen() {
         try {
-            // this.mActivity.showScreen();
+            screen.showScreen();
         } catch (Exception e) {
             e.printStackTrace();
         }
