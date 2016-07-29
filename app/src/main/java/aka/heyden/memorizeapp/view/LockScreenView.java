@@ -1,64 +1,67 @@
 package aka.heyden.memorizeapp.view;
 
 import android.animation.Animator;
-import android.animation.TimeInterpolator;
 import android.app.Activity;
-import android.app.ActivityManager;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.graphics.PixelFormat;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
-
-import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.RxLifecycle;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import aka.heyden.memorizeapp.LockApplication;
-import aka.heyden.memorizeapp.databinding.ActivityLockBinding;
-import aka.heyden.memorizeapp.util.NavigationUtil;
 import aka.heyden.memorizeapp.R;
 import aka.heyden.memorizeapp.data.ScreenData;
+import aka.heyden.memorizeapp.databinding.ActivityLockBinding;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
+import static android.content.Context.WINDOW_SERVICE;
 
-public class LockActivity extends Activity implements View.OnClickListener, View.OnTouchListener {
-    private ScreenData mData;
+/**
+ * Created by N4047 on 2016-07-29.
+ */
+
+public class LockScreenView implements View.OnClickListener, View.OnTouchListener{
+    private View screen;
+    private WindowManager windowManager;
+    private static WindowManager.LayoutParams lockScreen =  new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+            PixelFormat.TRANSLUCENT);
+    private static WindowManager.LayoutParams dismissKeyguard =  new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT);
     private ActivityLockBinding binding;
+    private ScreenData mData;
     private PublishSubject<String> timerQue;
     private PublishSubject<String> quit;
     private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일\nHH시 mm분 ss초", Locale.KOREA);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        init();
-    }
+    public LockScreenView(Context mContext) {
+        windowManager = (WindowManager) mContext.getSystemService(WINDOW_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        screen = inflater.inflate(R.layout.activity_lock, null);
+        binding = DataBindingUtil.bind(screen);
 
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.confirm) {
-            finishActivity();
-        }
-    }
-
-    private void init() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_lock);
+        binding.getRoot().setOnTouchListener(this);
         binding.confirm.setOnClickListener(this);
-        binding.root.setOnTouchListener(this);
-
-        // changeData(this.mData = getIntent().getExtras().getParcelable("screenData"));
-        LockApplication.getInstance().getController().setActivity(this);
 
         quit = PublishSubject.create();
         timerQue = PublishSubject.create();
@@ -69,68 +72,57 @@ public class LockActivity extends Activity implements View.OnClickListener, View
         rx.Observable.interval(1, TimeUnit.SECONDS).map(t -> getDataTime()).takeUntil(quit).subscribe(timerQue);
     }
 
-    public void showScreen() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    public void dismissKeyguard(){
+        windowManager.addView(screen, dismissKeyguard);
     }
 
-    public void changeData(ScreenData mData) {
+    public void showScreen(){
+        dismissKeyguard();
+        windowManager.updateViewLayout(screen, lockScreen);
+    }
+
+    public void changeData(ScreenData mData){
         this.mData = mData;
         binding.word.setText(this.mData.getWord());
         binding.diction.setText(this.mData.getDiction());
         binding.datetime.setText(getDataTime());
         showScreen();
     }
-
-    private void finishActivity() {
-        LockApplication.getInstance().getController().setActivity(null);
-        quit.onNext(null);
-        timerQue.onCompleted();
-        finish();
-    }
-
     private String getDataTime() {
         return mSimpleDateFormat.format(new Date());
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // Recovery Service if it's dead
-        if (!isServiceRunningCheck()) {
-            NavigationUtil.startScreenController(this);
+    public void onClick(View v) {
+        if (v.getId() == R.id.confirm) {
+            finish();
         }
     }
 
-    public boolean isServiceRunningCheck() {
-        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if ("ScreenController".equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
+    private void finish() {
+        quit.onNext(null);
+        timerQue.onCompleted();
+        windowManager.removeViewImmediate(screen);
     }
 
     float dX;
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                dX = binding.root.getX() - event.getRawX();
+                dX = screen.getRootView().getX() - event.getRawX();
                 break;
             case MotionEvent.ACTION_MOVE:
-                binding.root.animate()
+                screen.getRootView().animate()
                         .x(event.getRawX() + dX)
                         .setDuration(0)
                         .start();
                 break;
             case MotionEvent.ACTION_UP:
-                binding.root.animate()
-                        .x(binding.root.getWidth())
+                screen.getRootView().animate()
+                        .x(screen.getRootView().getWidth())
                         .setDuration(1500)
-                        .setInterpolator(t -> 0.2f)
+                        .setInterpolator(t->0.2f)
                         .setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -138,7 +130,7 @@ public class LockActivity extends Activity implements View.OnClickListener, View
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                finishActivity();
+                                finish();
                             }
 
                             @Override

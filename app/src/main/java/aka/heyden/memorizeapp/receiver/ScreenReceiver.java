@@ -20,10 +20,8 @@ public class ScreenReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("receiver", "들어왔음 : " + intent.getAction());
         CustomIntent serviceIntent = new CustomIntent(context, ScreenController.class);
         serviceIntent.putExtra("screenState", (intent.getAction()==null)?"EMPTY":intent.getAction());
-        Log.d("receiver", serviceIntent.getExtras().getString("screenState"));
         context.startService(serviceIntent);
     }
 }
