@@ -13,7 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9dac8e53-3404-4941-b8d6-792fba3c0155" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="Steward.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,14 +46,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider editor-type-id="MarkdownPreviewEditor">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="11" column="85" selection-start-line="11" selection-start-column="85" selection-end-line="11" selection-end-column="85" />
+            <state relative-caret-position="252">
+              <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
               <folding />
             </state>
           </provider>
@@ -69,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LockScreenView.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LockScreenView.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
+            <state relative-caret-position="468">
+              <caret line="131" column="13" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1426#1427#0" expanded="true" />
@@ -1960,8 +1960,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ActivityCallBack.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/FakeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_fake.xml" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -2287,7 +2287,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
     <property name="FullScreen" value="true" />
-    <property name="device.picker.selection" value="ce021602329a5b2502" />
+    <property name="device.picker.selection" value="192.168.59.103:5555" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -2717,7 +2717,14 @@
       <option name="project" value="LOCAL" />
       <updated>1469979148610</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="fix animation information">
+      <created>1469979765460</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1469979765460</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2727,7 +2734,7 @@
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="true" show_stripe_button="true" weight="1.0" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="true" show_stripe_button="true" weight="1.0" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" x="-1600" y="70" width="1084" height="1280" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2767,7 +2774,8 @@
     <MESSAGE value="160728" />
     <MESSAGE value="change lock screen(activity -&gt; view)" />
     <MESSAGE value="add disable keyguard by activity" />
-    <option name="LAST_COMMIT_MESSAGE" value="add disable keyguard by activity" />
+    <MESSAGE value="fix animation information" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix animation information" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -3280,17 +3288,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="11" column="85" selection-start-line="11" selection-start-column="85" selection-end-line="11" selection-end-column="85" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -3301,8 +3298,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
+        <state relative-caret-position="468">
+          <caret line="131" column="13" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1426#1427#0" expanded="true" />
@@ -3314,6 +3311,17 @@
             <element signature="e#5463#5464#0" expanded="true" />
             <element signature="e#5507#5508#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
+          <folding />
         </state>
       </provider>
     </entry>
