@@ -143,9 +143,9 @@ public class LockScreenView implements View.OnClickListener, View.OnTouchListene
                 break;
             case MotionEvent.ACTION_UP:
                 screen.getRootView().animate()
-                        .x(screen.getRootView().getWidth())
-                        .setDuration(1500)
-                        .setInterpolator(t->0.2f)
+                        .x(8000)
+                        .setDuration(250)
+                        .setInterpolator(t->0.4f)
                         .setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {

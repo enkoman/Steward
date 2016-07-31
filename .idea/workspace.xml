@@ -11,18 +11,9 @@
     <option name="LOGCAT_FORMAT_STRING" value="%1$s %4$c/%5$s: %6$s" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dac8e53-3404-4941-b8d6-792fba3c0155" name="Default" comment="add disable keyguard by activity">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ActivityCallBack.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ViewCallBack.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/util/Constant.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_fake.xml" />
+    <list default="true" id="9dac8e53-3404-4941-b8d6-792fba3c0155" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ScreenController.java" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ScreenController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/FakeActivity.java" />
     </list>
     <ignored path="Steward.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,7 +59,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="126">
@@ -78,21 +69,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LockScreenView.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="LockScreenView.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="101" column="9" selection-start-line="101" selection-start-column="9" selection-end-line="101" selection-end-column="9" />
+            <state relative-caret-position="342">
+              <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1426#1427#0" expanded="true" />
                 <element signature="e#1456#1457#0" expanded="true" />
                 <element signature="e#3599#3600#0" expanded="true" />
                 <element signature="e#3645#3646#0" expanded="true" />
-                <element signature="e#4889#4890#0" expanded="true" />
-                <element signature="e#4961#4962#0" expanded="true" />
-                <element signature="e#5491#5492#0" expanded="true" />
-                <element signature="e#5535#5536#0" expanded="true" />
+                <element signature="e#4861#4862#0" expanded="true" />
+                <element signature="e#4933#4934#0" expanded="true" />
+                <element signature="e#5463#5464#0" expanded="true" />
+                <element signature="e#5507#5508#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1968,9 +1959,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ScreenController.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/model/ActivityCallBack.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/FakeActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_fake.xml" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java" />
       </list>
     </option>
   </component>
@@ -2719,7 +2710,14 @@
       <option name="project" value="LOCAL" />
       <updated>1469800931976</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="add disable keyguard by activity">
+      <created>1469979148610</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1469979148610</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2794,10 +2792,10 @@
             <element signature="e#1456#1457#0" expanded="true" />
             <element signature="e#3599#3600#0" expanded="true" />
             <element signature="e#3645#3646#0" expanded="true" />
-            <element signature="e#4889#4890#0" expanded="true" />
-            <element signature="e#4961#4962#0" expanded="true" />
-            <element signature="e#5491#5492#0" expanded="true" />
-            <element signature="e#5535#5536#0" expanded="true" />
+            <element signature="e#4861#4862#0" expanded="true" />
+            <element signature="e#4933#4934#0" expanded="true" />
+            <element signature="e#5463#5464#0" expanded="true" />
+            <element signature="e#5507#5508#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2908,10 +2906,10 @@
             <element signature="e#1456#1457#0" expanded="true" />
             <element signature="e#3599#3600#0" expanded="true" />
             <element signature="e#3645#3646#0" expanded="true" />
-            <element signature="e#4889#4890#0" expanded="true" />
-            <element signature="e#4961#4962#0" expanded="true" />
-            <element signature="e#5491#5492#0" expanded="true" />
-            <element signature="e#5535#5536#0" expanded="true" />
+            <element signature="e#4861#4862#0" expanded="true" />
+            <element signature="e#4933#4934#0" expanded="true" />
+            <element signature="e#5463#5464#0" expanded="true" />
+            <element signature="e#5507#5508#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3249,24 +3247,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="101" column="9" selection-start-line="101" selection-start-column="9" selection-end-line="101" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1426#1427#0" expanded="true" />
-            <element signature="e#1456#1457#0" expanded="true" />
-            <element signature="e#3599#3600#0" expanded="true" />
-            <element signature="e#3645#3646#0" expanded="true" />
-            <element signature="e#4889#4890#0" expanded="true" />
-            <element signature="e#4961#4962#0" expanded="true" />
-            <element signature="e#5491#5492#0" expanded="true" />
-            <element signature="e#5535#5536#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_fake.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -3316,6 +3296,24 @@
         <state relative-caret-position="126">
           <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/aka/heyden/memorizeapp/view/LockScreenView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1426#1427#0" expanded="true" />
+            <element signature="e#1456#1457#0" expanded="true" />
+            <element signature="e#3599#3600#0" expanded="true" />
+            <element signature="e#3645#3646#0" expanded="true" />
+            <element signature="e#4861#4862#0" expanded="true" />
+            <element signature="e#4933#4934#0" expanded="true" />
+            <element signature="e#5463#5464#0" expanded="true" />
+            <element signature="e#5507#5508#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
