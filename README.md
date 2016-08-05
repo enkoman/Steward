@@ -10,7 +10,8 @@
 >5. 160728 : ISSUE발생. 홈버튼 제어를 위해 기존의 activity기반의 잠금화면을 view로 변경해야함
 >6. 160729 : activity -> view(TYPE_SYSTEM_ERROR) / DISABLE KEYGUARD는 미적용
 >7. 160731 : DISABLE KEYGUARD 적용(WindowManager의 AddView의 경우 1개만 가능하여 1px 투명 액티비티로 해제)
->#####헥헥.. 생각보다 keyguardlock API가 deprecated되면서 우회해서 구현하자니 너무나 힘들다 ㅠㅠ
+> #####헥헥.. 생각보다 keyguardlock API가 deprecated되면서 우회해서 구현하자니 너무나 힘들다 ㅠㅠ
+>8. 160805 : 권한요청 관련 메소드 수정
 
 ----------------------------------------------------------------------------------
 
