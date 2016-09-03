@@ -7,13 +7,22 @@
 >2. 160724 : 잠금화면 중복 제거 및 잠금화면 유무를 프리퍼런스 사용
 >3. 160726 : ScreenController를 서비스로 바꿈(프리퍼런스 제거). 도즈모드 테스트 결과 정상작동
 >4. 160727 : 실시간 현재시간 반영(RX). 슬라이드 애니메이션 추가(가중치 및 취소 미적용)
->5. 160728 : ISSUE발생. 홈버튼 제어를 위해 기존의 activity기반의 잠금화면을 view로 변경해야함
+>5. 160728 : 홈버튼 제어를 위해 기존의 activity기반의 잠금화면을 view로 변경해야함
 >6. 160729 : activity -> view(TYPE_SYSTEM_ERROR) / DISABLE KEYGUARD는 미적용
 >7. 160731 : DISABLE KEYGUARD 적용(WindowManager의 AddView의 경우 1개만 가능하여 1px 투명 액티비티로 해제)
-> #####헥헥.. 생각보다 keyguardlock API가 deprecated되면서 우회해서 구현하자니 너무나 힘들다 ㅠㅠ
 >8. 160805 : 권한요청 관련 메소드 수정
+>9. 160809 : 잠금화면에 슬라이드 애니메이션 수정 / view.animate end는 Listener를 통해서만 가능(무언가 알수없는 error가 로그에 쭉 찍히니 확인해볼것)
+>10. 160812 : 코드 분리(애니메이션 <-> 잠금화면view) / Rx 코드수정(item interval emit이 takeUntil()로 중지되지않는것을 수정)
+>11. 160824 : 프로젝트 구조수정. service를 Global Process 내에서 생성, 이후 app process가 죽어도 receiver를 통해 잠금화면이 지속적으로 사용이 가능하게 설정. 또한 service와 app process와의 통신(IPC)을 하기위해 Messenger를 사용.
+>12. 160825 : Global process에 절차대로 서비스를 생성, 그러나 그냥 별도의 프로세스인것같아 확인이 필요. app process가 죽으면 해당 서비스의 프로세스도 죽는데 이유 확인 필요.
+>13. 160902 : Realm과 Glide 적용. 잠금화면의 배경화면관련 작업 진행중(custom color 끝, image시작)
+
+<br>
+#####ToDo
+######1. TDD로 기능 테스트 및 리팩토링
+######2. 로컬 DB에 이미지리소스 저장
 
 ----------------------------------------------------------------------------------
 
-#ToDo-List
+
 ###미션2 - 자동 데이터동기화를 구현해봅시다

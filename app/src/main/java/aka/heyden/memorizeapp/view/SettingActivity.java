@@ -1,77 +1,123 @@
 package aka.heyden.memorizeapp.view;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.nobrain.android.permissions.AndroidPermissions;
 
+import java.io.File;
+
+import aka.heyden.memorizeapp.databinding.ActivitySettingBinding;
+import aka.heyden.memorizeapp.model.ScreenBackground;
+import aka.heyden.memorizeapp.presenter.SettingPresenter;
+import aka.heyden.memorizeapp.presenter.SettingPresenterImpl;
+import aka.heyden.memorizeapp.util.Constant;
+import aka.heyden.memorizeapp.util.L;
 import aka.heyden.memorizeapp.util.NavigationUtil;
 import aka.heyden.memorizeapp.R;
 
 /**
- * Created by N4047 on 2016-07-22.
+ * Created by Han In-Gyu on 2016-07-22.<br><br>
+ * 설정화면 view 액티비티 클래스
  */
 
-public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button screen;
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener, SettingPresenter.view {
     private boolean isScreenOn;
+    private ActivitySettingBinding binding;
+    private SettingPresenterImpl presenter;
     private static final String[] permissions = {Manifest.permission.DISABLE_KEYGUARD};
     public static final int REQUEST_CODE = 6161;
-
+    public String result = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
 
         init();
     }
 
+    /** initialize */
     private void init() {
-        screen = (Button) findViewById(R.id.screen);
-        screen.setOnClickListener(this);
+        initPermission();
+        initView();
+        initEvent();
+    }
 
-        // 스크린 락 유무 확인
-        isScreenOn = getPreferences();
-        uiUpdate(isScreenOn);
+    private void initView() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
 
+        // presenter 세팅
+        presenter = new SettingPresenterImpl();
+        presenter.setView(this);
+    }
+
+    private void initEvent() {
+        binding.main.screen.setOnClickListener(this);
+        binding.main.changeImage.setOnClickListener(this);
+        binding.main.changeColor.setOnClickListener(this);
+        binding.main.preview.setOnClickListener(this);
+    }
+
+    private void initPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkDrawOverlayPermission(this);
             permissionCheck(permissions);
         }
     }
 
-    private void uiUpdate(boolean flag) {
-        screen.setText(flag ? "끌까요?" : "킬까요?");
+    @Override
+    public void changeScreenStatus(boolean setScreenOn) {
+        if (setScreenOn) {
+            activeScreen();
+        } else {
+            defectiveScreen();
+        }
     }
 
-    private void screenOn() {
-        Log.d("?", "screenOn");
-        savePreferences(true);
-        this.isScreenOn = true;
-        uiUpdate(this.isScreenOn);
+    private void UpdateUi(boolean flag) {
+        if(flag){
+            activeScreen();
+        }else{
+            defectiveScreen();
+        }
+
+        try {
+            ScreenBackground data = presenter.getPreviewThumbnail();
+            if(data.getType() == Constant.CUSTOM_COLOR){
+                binding.main.preview.setBackgroundColor(Integer.parseInt(data.getResult()));
+            }else{
+                Glide.with(SettingActivity.this).load(new File(data.getResult())).into(binding.main.preview);
+            }
+        }catch (Exception e){
+        }
+
+    }
+
+    private void activeScreen() {
+        binding.main.screen.setText("끌까요?");
+        this.isScreenOn = saveAndUpdatePreferences(true);
         NavigationUtil.startScreenController(this);
+        L.d("uiUpdate : " + (this.isScreenOn  ? "ON" : "OFF"));
     }
 
-    private void screenOff() {
-        Log.d("?", "screenOff");
-        savePreferences(false);
-        this.isScreenOn = false;
-        uiUpdate(this.isScreenOn);
+    private void defectiveScreen() {
+        binding.main.screen.setText("킬까요?");
+        this.isScreenOn = saveAndUpdatePreferences(false);
         NavigationUtil.stopScreenController(this);
+        L.d("uiUpdate : " + (this.isScreenOn  ? "ON" : "OFF"));
     }
 
     // 값 불러오기
@@ -81,51 +127,60 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     // 값 저장하기
-    private void savePreferences(boolean flag) {
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("screenLock", flag);
-        editor.commit();
+    private boolean saveAndUpdatePreferences(boolean isScreenOn) {
+        SharedPreferences.Editor editor = getSharedPreferences("pref", MODE_PRIVATE).edit();
+        editor.putBoolean("screenLock", isScreenOn);
+        return editor.commit() == isScreenOn;
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.screen) {
-            if (this.isScreenOn) {
-                screenOff();
-            } else {
-                screenOn();
-            }
+        switch (view.getId()) {
+            case R.id.screen:
+                presenter.controlLockscreen(!isScreenOn);
+                break;
+            case R.id.change_image:
+                presenter.changeImage();
+                break;
+            case R.id.change_color:
+                showColorPicker();
+                break;
+            case R.id.preview:
+                presenter.previewScreen();
+                break;
         }
+    }
+
+    private void showColorPicker(){
+        NavigationUtil.openColorPicker(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isScreenOn) {
-            NavigationUtil.startScreenController(this);
-        }
+        // 스크린 락 유무 확인
+        UpdateUi(isScreenOn = getPreferences());
     }
 
     private void permissionCheck(String[] permissions) {
         AndroidPermissions.check(this)
                 .permissions(permissions)
-                .hasPermissions(permissions1 -> {})
+                .hasPermissions(permissions1 -> { })
                 .noPermissions(permissions2 -> ActivityCompat.requestPermissions(SettingActivity.this, permissions2, REQUEST_CODE))
                 .check();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, final String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
         AndroidPermissions.result()
-                .addPermissions(REQUEST_CODE, this.permissions)
+                .addPermissions(REQUEST_CODE, SettingActivity.permissions)
                 .putActions(REQUEST_CODE, null, (hasPermissions, noPermissions) -> {
                     if (noPermissions != null) {
                         for (String permission : hasPermissions) {
-                            Log.d("test", "획득성공 : " + permission);
+                            L.d("획득성공 : " + permission);
                         }
                         for (String permission : noPermissions) {
-                            Log.d("test", "획득실패 : " + permission);
+                            L.d("획득실패 : " + permission);
                         }
                         finish();
                     }
@@ -135,12 +190,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
     public void checkDrawOverlayPermission(Context mContext) {
         /** check if we already  have permission to draw over other apps */
-        if (!Settings.canDrawOverlays(mContext)) {
-            /** if not construct intent to request permission */
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
-            /** request permission via start activity for result */
-            startActivityForResult(intent, REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(mContext)) {
+                /** if not construct intent to request permission */
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                /** request permission via start activity for result */
+                startActivityForResult(intent, REQUEST_CODE);
+            }
         }
     }
 
@@ -150,11 +207,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
          is equal our requested code for draw permission  */
         if (requestCode == REQUEST_CODE) {
             /** if so check once again if we have permission */
-            if (Settings.canDrawOverlays(this)) {
-                // continue here - permission was granted
-            } else {
-                Toast.makeText(this, "권한획득에 실패하여 어플리케이션을 종료합니다.", Toast.LENGTH_SHORT).show();
-                finish();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    Toast.makeText(this, "권한획득에 실패하여 어플리케이션을 종료합니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         }
     }

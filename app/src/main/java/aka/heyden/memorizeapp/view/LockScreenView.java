@@ -1,90 +1,102 @@
 package aka.heyden.memorizeapp.view;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import aka.heyden.memorizeapp.R;
-import aka.heyden.memorizeapp.data.ScreenData;
 import aka.heyden.memorizeapp.databinding.ActivityLockBinding;
-import aka.heyden.memorizeapp.model.ScreenController;
-import aka.heyden.memorizeapp.model.ViewCallBack;
+import aka.heyden.memorizeapp.model.ScreenWord;
+import aka.heyden.memorizeapp.model.SlideAnimation;
+import aka.heyden.memorizeapp.presenter.ScreenController;
+import aka.heyden.memorizeapp.presenter.ViewCallBack;
 import aka.heyden.memorizeapp.util.Constant;
+import aka.heyden.memorizeapp.util.SubscriptionUtils;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
+import rx.subscriptions.CompositeSubscription;
 
 import static android.content.Context.WINDOW_SERVICE;
 
 /**
- * Created by N4047 on 2016-07-29.
+ * Created by Han In-Gyu on 2016-07-29.<br><br>
+ * 실제 잠금화면으로 사용되는 View 클래스
  */
-
-public class LockScreenView implements View.OnClickListener, View.OnTouchListener, ViewCallBack {
+public class LockScreenView extends SlideAnimation implements ViewCallBack {
     private View screen;
-    private WindowManager windowManager;
+    private ScreenWord mData;
     private ActivityLockBinding binding;
-    private ScreenData mData;
+    private WindowManager windowManager;
+    private ViewCallBack.presenter presenter;
+    private Subscription endItem;
     private PublishSubject<String> timerQue;
-    private PublishSubject<String> quit;
-    private ViewCallBack.controller controller;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
 
     /**
-     * 1.View를 초기화하고 해당 레이아웃 데이터를 바인딩한다.
-     * 2.바인딩된 데이터를 이용해 이벤트를 등록한다.
-     * 3.실시간 현재시간 업데이트를 위한 RX 옵저버와 서브젝트를 초기화한다.
+     * 1.View를 초기화하고 해당 레이아웃 데이터를 바인딩한다.<br>
+     * 2.바인딩된 데이터를 이용해 이벤트를 등록한다.<br>
+     * 3.실시간 현재시간 업데이트를 위한 RX 옵저버와 서브젝트를 초기화한다.<br>
+     *
      * @param mContext
      */
     public LockScreenView(Context mContext) {
         init(mContext);
     }
 
-    private void init(Context mContext){
+    private void init(Context mContext) {
         initView(mContext);
         initEvent();
         initReactive();
+        initAnimation(windowManager, screen);
     }
 
-
-    private void initView(Context mContext){
+    // 추후에 리소스가 많이 필요한 부분은 병렬처리로 변환할것
+    private void initView(Context mContext) {
         windowManager = (WindowManager) mContext.getSystemService(WINDOW_SERVICE);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         screen = inflater.inflate(R.layout.activity_lock, null);
         binding = DataBindingUtil.bind(screen);
-        setController((ScreenController) mContext);
+        setPresenter((ScreenController) mContext);
+        windowManager.addView(screen, Constant.lockScreen);
+        screen.setVisibility(View.GONE);
     }
 
-    private void initEvent(){
-        binding.getRoot().setOnTouchListener(this);
-        binding.confirm.setOnClickListener(this);
+    private void initEvent() {
+        binding.root.setOnTouchListener(this);
+        binding.confirm.setOnClickListener(v -> {
+            // 슬라이딩 애니메이션중 본래 뷰의 버튼이 눌려 종료가 되는걸 방지한다
+            if (!isSliding()) {
+                finish();
+            }
+        });
     }
 
-    private void initReactive(){
-        quit = PublishSubject.create();
+    private void initReactive() {
         timerQue = PublishSubject.create();
         timerQue.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .lift(SubscriptionUtils.composite(subscriptions))
                 .subscribe(t -> binding.datetime.setText(t), Throwable::printStackTrace);
-        rx.Observable.interval(1, TimeUnit.SECONDS).map(t -> getDataTime()).takeUntil(quit).subscribe(timerQue);
     }
 
-    // 매우 좋지 않은 부분..
-    // 화면의 뷰가 존재하는지 검사하는 논리가 필요
-    public void showScreen(){
-        try {
-            windowManager.addView(screen, Constant.lockScreen);
-        }catch (Exception e){
-        }
+    /**
+     * 화면에 실시간 시간갱신을 위한 아이템 발행을 시작한다
+     * @param interval 아이템 발행간격 시간
+     */
+    public void startClock(int interval) {
+        endItem = rx.Observable.interval(interval, TimeUnit.MILLISECONDS)
+                .map(t -> getDataTime())
+                .lift(SubscriptionUtils.composite(subscriptions))
+                .subscribe(timerQue);
     }
 
-    public void changeData(ScreenData mData){
+    public void changeData(ScreenWord mData) {
         this.mData = mData;
         binding.word.setText(this.mData.getWord());
         binding.diction.setText(this.mData.getDiction());
@@ -92,89 +104,73 @@ public class LockScreenView implements View.OnClickListener, View.OnTouchListene
     }
 
     private String getDataTime() {
-        return Constant.mSimpleDateFormat.format(new Date());
+        return Constant.mSimpleDateFormat.format(System.currentTimeMillis());
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.confirm) {
-            finish();
+    /**
+     * 1. 잠금화면이 존재하지않는다면 새로 생성한다.<br>
+     * 2. 잠금화면이 존재한다면<br>x
+     * -> 1. Rx이벤트를 구독중인것이 있다면 아이템 발행만 멈춘다<br>
+     * -> 2. Rx이벤트를 구독중인것이 없다면 모든 Rx 이벤트를 초기화한다<br>
+     * 3. 잠금화면을 띄운다
+     *
+     * @param mContext
+     */
+    public void initScreen(Context mContext) {
+        if (screenIsNull()) {
+            init(mContext);
+        } else {
+            showScreen();
+            if (endItem != null) {
+                endItem.unsubscribe();
+            }
         }
     }
 
-    public void initScreen(Context mContext) {
-        init(mContext);
 
-        // else의 경우 screen 객체의 이벤트가 먹히지앖음
-        // 우선 임시로 모든 경우에 새로 초기화하게 코드 작성
-        /*if(screenIsNull()){
-            init(mContext);
-        }else{
-            binding.getRoot().setX(0);
-            initReactive();
-        }*/
+    public void showScreen() {
+        screen.setVisibility(View.VISIBLE);
+        screen.setX(0);
     }
-
 
     private boolean screenIsNull() {
-        return screen==null?true:false;
+        return screen == null ? true : false;
     }
 
-
-    private void finish() {
-        quit.onNext(null);
-        timerQue.onCompleted();
-        windowManager.removeViewImmediate(screen);
-        this.controller.finish();
-    }
-
-    float dX;
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                dX = screen.getRootView().getX() - event.getRawX();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                screen.getRootView().animate()
-                        .x(event.getRawX() + dX)
-                        .setDuration(0)
-                        .start();
-                break;
-            case MotionEvent.ACTION_UP:
-                screen.getRootView().animate()
-                        .x(8000)
-                        .setDuration(250)
-                        .setInterpolator(t->0.4f)
-                        .setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                finish();
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
-                            }
-                        }).start();
-                break;
-            default:
-                return false;
+    protected void finish() {
+        if (endItem != null) {
+            endItem.unsubscribe();
         }
-        return true;
+        endItem = null;
+        this.presenter.finish();
+        super.finish();
     }
 
     @Override
-    public void setController(ViewCallBack.controller controller) {
-        this.controller = controller;
+    public void destroy() {
+        unSubscription();
+        this.screen = null;
+        this.windowManager = null;
+        this.binding = null;
+        this.mData = null;
+        this.endItem = null;
+        this.timerQue = null;
+        this.subscriptions = null;
+        this.presenter = null;
+        super.destroy();
+    }
+
+    private void unSubscription() {
+        if (subscriptions != null) {
+            if (subscriptions.hasSubscriptions()) {
+                subscriptions.unsubscribe();
+            }
+        }
+    }
+
+    @Override
+    public void setPresenter(ViewCallBack.presenter presenter) {
+        this.presenter = presenter;
     }
 }

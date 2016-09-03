@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Steward</string>
+    <string name="service_name">memorizeapp.steward</string>
+    <string name="app_package">aka.heyden.memorizeapp</string>
+    <string name="unlock_screen">aka.heyden.memorizeapp.unlock</string>
 </resources>

@@ -2,31 +2,35 @@ package aka.heyden.memorizeapp;
 
 import android.app.Application;
 
-import aka.heyden.memorizeapp.model.ScreenController;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
- * Created by N4047 on 2016-07-25.
+ * Created by Han In-Gyu on 2016-07-25.<br><br>
  */
 
 public class LockApplication extends Application {
     private static LockApplication appInstance;
-    private ScreenController controller;
+    private static Realm realm;
 
     @Override
     public void onCreate() {
         super.onCreate();
         appInstance = this;
+
+        initReam();
+    }
+
+    private void initReam(){
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
+        realm = Realm.getDefaultInstance();
+    }
+
+    public static Realm getRealm(){
+        return realm;
     }
 
     public static LockApplication getInstance() {
         return appInstance;
-    }
-
-    public void setController(ScreenController controller){
-        this.controller = controller;
-    }
-
-    public ScreenController getController(){
-        return this.controller;
     }
 }
